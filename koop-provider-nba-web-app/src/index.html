@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset='utf-8'>
+  <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no'>
+
+  <title>Create a custom widget - 4.4</title>
+
+  <style>
+    html,
+    body,
+    #viewDiv {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+    }
+    .esri-hello-world {
+      font-family: 'Helvetica Neue', sans-serif;
+      display: inline-block;
+      background-color: white;
+    }
+    
+    .esri-hello-world--emphasis {
+      font-weight: bold;
+    }
+  </style>
+  <script>
+  var locationPath = location.pathname.replace(/\/[^\/]+$/, '');
+  window.dojoConfig = {
+    packages: [
+      {
+        name: 'app',
+        location: locationPath + 'app'
+      }
+    ]
+  };
+</script>
+  <link rel="stylesheet" href="https://js.arcgis.com/4.4/esri/css/main.css">
+  <script src='https://js.arcgis.com/4.4/'></script>
+  <script>
+    var widget;
+
+    require([
+      'esri/Map',
+      'esri/views/MapView',
+      'app/PlayerSelector',
+      'dojo/domReady!'
+    ], function(
+      Map,
+      MapView,
+      PlayerSelector
+    ) {
+
+      var map = new Map({
+        basemap: 'dark-gray'
+      });
+      var view = new MapView({
+        container: 'viewDiv',
+        zoom: 15,
+        center: [-117.1628487109789, 32.706813240831096],
+        map: map
+      });
+
+      var names = [
+        {
+          firstName: 'John',
+          lastName: 'Smith'
+        },
+        {
+          firstName: 'Jackie',
+          lastName: 'Miller'
+        },
+        {
+          firstName: 'Anna',
+          lastName: 'Price'
+        }],
+        nameIndex = 0;
+
+      var widget = new PlayerSelector({
+        firstName: names[nameIndex].firstName,
+        lastName: names[nameIndex].lastName,
+        // container: 'widgetDiv'
+      });
+
+      view.ui.add(widget, "top-right");
+
+      function changeName() {
+        widget.set(names[++nameIndex % names.length]);
+      }
+
+      widget.on('greeted', function(e) {
+        console.log(e);
+      })
+      setInterval(changeName, 1000);
+    });
+  </script>
+</head>
+
+<body>
+  <div id='viewDiv'></div>
+</body>
+</html>

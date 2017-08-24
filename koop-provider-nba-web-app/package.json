@@ -1,0 +1,25 @@
+{
+  "name": "koop-provider-nba-web-app",
+  "version": "0.1.0",
+  "description": "Web app to demo the koop-provider-nba",
+  "scripts": {
+    "start": "concurrently \"tsc -w\" \"ws -d src\"",
+    "test": "tslint -c tslint.json 'src/**/*.ts*'",
+    "postinstall": "tsc"
+  },
+  "author": "Gavin Rehkemper <gavin@gavinr.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/gavinr/koop-provider-nba",
+  "devDependencies": {
+    "@types/arcgis-js-api": "^4.4.0",
+    "dojo-typings": "^1.11.7",
+    "grunt": "^1.0.1",
+    "grunt-sass": "^2.0.0",
+    "local-web-server": "1.2.8",
+    "tslint": "^5.5.0",
+    "tslint-config-standard": "^6.0.1",
+    "typescript": "^2.4.2",
+    "concurrently": "^3.5.0"
+  },
+  "dependencies": {}
+}
