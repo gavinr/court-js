@@ -7,6 +7,7 @@ define([
   'dojo/dom',
   'dojo/on',
 
+  'esri/renderers/UniqueValueRenderer',
   'esri/geometry/Point',
   'esri/graphic',
   'esri/InfoTemplate',
@@ -19,7 +20,7 @@ define([
   _WidgetBase, _TemplatedMixin,
   declare,
   lang, dom, on,
-  Point, Graphic, InfoTemplate, FeatureLayer, ArcGISTiledMapServiceLayer, Map, esriRequest, PictureMarkerSymbol
+  UniqueValueRenderer, Point, Graphic, InfoTemplate, FeatureLayer, ArcGISTiledMapServiceLayer, Map, esriRequest, PictureMarkerSymbol
 ) {
   return declare([_WidgetBase, _TemplatedMixin], {
     templateString: '<div class="map-container"></div>',
@@ -29,7 +30,7 @@ define([
       this.inherited(arguments);
       // Create the map
       this.map = new Map(this.domNode, {
-        basemap: "gray",
+        basemap: "dark-gray",
         center: [0, 0.001],
         zoom: 18
       });
@@ -47,9 +48,57 @@ define([
       }
 
       this.nbaFeatureLayer = new FeatureLayer(this.baseServiceUrl + playerId + '/FeatureServer/0', {
-        definitionExpression: 'SEASON = ' + year
+        definitionExpression: 'SEASON = ' + year,
+        outFields: ['*']
       });
+      this.nbaFeatureLayer.setRenderer(this.getRenderer());
       this.map.addLayer(this.nbaFeatureLayer);
+    },
+
+    getRenderer: function() {
+      var uvrJson = {"type": "uniqueValue",
+        "field1": "EVENT_TYPE",
+        "defaultSymbol": {
+          "color": [0, 0, 0, 64],
+          "outline": {
+            "color": [0, 0, 0, 255],
+            "width": 1,
+            "type": "esriSMS",
+            "style": "esriSMSCircle"
+          },
+          "type": "esriSFS",
+          "style": "esriSFSNull"
+        },
+        "uniqueValueInfos": [{
+          "value": "Missed Shot",
+          "symbol": {
+            "color": [255, 0, 0, 128],
+            "outline": {
+              "color": [0, 0, 0, 255],
+              "width": 1,
+              "type": "esriSLS",
+              "style": "esriSLSSolid"
+            },
+            "type": "esriSMS",
+            "style": "esriSMSCircle"
+          }
+        }, {
+          "value": "Made Shot",
+          "symbol": {
+            "color": [0, 255, 0, 128],
+            "outline": {
+              "color": [0, 0, 0, 255],
+              "width": 1,
+              "type": "esriSLS",
+              "style": "esriSLSSolid"
+            },
+            "type": "esriSMS",
+            "style": "esriSMSCircle"
+          }
+        }]
+      };
+      
+      return new UniqueValueRenderer(uvrJson);
     }
   });
 });
