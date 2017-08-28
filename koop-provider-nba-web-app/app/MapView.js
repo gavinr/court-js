@@ -15,12 +15,13 @@ define([
   'esri/layers/ArcGISTiledMapServiceLayer',
   'esri/map',
   'esri/request',
+  'esri/InfoTemplate',
   'esri/symbols/PictureMarkerSymbol',
 ], function(
   _WidgetBase, _TemplatedMixin,
   declare,
   lang, dom, on,
-  UniqueValueRenderer, Point, Graphic, InfoTemplate, FeatureLayer, ArcGISTiledMapServiceLayer, Map, esriRequest, PictureMarkerSymbol
+  UniqueValueRenderer, Point, Graphic, InfoTemplate, FeatureLayer, ArcGISTiledMapServiceLayer, Map, esriRequest, InfoTemplate, PictureMarkerSymbol
 ) {
   return declare([_WidgetBase, _TemplatedMixin], {
     templateString: '<div class="map-container"></div>',
@@ -52,6 +53,8 @@ define([
         outFields: ['*']
       });
       this.nbaFeatureLayer.setRenderer(this.getRenderer());
+      var infoTemplate = new InfoTemplate("${PLAYER_NAME}", "${*}");
+      this.nbaFeatureLayer.setInfoTemplate(infoTemplate);
       this.map.addLayer(this.nbaFeatureLayer);
     },
 
